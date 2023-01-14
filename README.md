@@ -1,11 +1,8 @@
 # Helpful Dev Scripts
-
 This project is a collection of useful scripts for various dev tasks.
 This really is a repository to store things that I use so I don't loose this knowledge.
 
-
-# Usage
-
+## Usage
 To get access to all scripts from your console source the 'source.sh' script in your .bashrc or .zshrc (or whatever your shell uses...)
 
 Make sure you read these scripts and understand what they do before you blindly follow my instructions. Don't be foolish.
@@ -45,11 +42,24 @@ if theres a docker-compose.yml
 
 
 ## build
+Supports gradle and maven, preferencing wrappers. Forwards arguments to function calls.
 
+examples:
 
+`./gradlew clean build`
+
+`./mvnw clean install`
 
 ## test
+Supports npm, gradle and maven, preferencing wrappers. Forwards arguments to function calls.
 
+examples:
+
+`npm test`
+
+`./gradlew test`
+
+`./mvnw test`
 
 
 ## jsonToCsv
@@ -177,9 +187,7 @@ We can from the above fairly concisely what has changed, and what it has changed
 
 The function is recursive, and will go deep on the object. So be careful with large very JSON structures.
 
-
 ## toLocalDate
-
 Convert a date to your into human readable date/time in the local timezone. Useful when you have a time in one zone or another and you want a quick conversion to your local timezone.
 
 Pass the dates in iso format and you'll be fine. Uses javascript under the covers, so any format that will work in a Date constructor.
@@ -194,7 +202,6 @@ Thu Jan 13 2022 22:40:00 GMT+1100 (Australian Eastern Daylight Time)
 ```
 
 ## toUtcDate
-
 Covert a given zoned/offset date into human readable UTC date/time
 
 Used javascript toUTCString function, so the format varies slightly from above.
