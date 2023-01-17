@@ -13,8 +13,9 @@ function toLocalDate() {
 function toUtcDate() {
   "${SCRIPT_DIR}"/js/toUtcDate.js "$@"
 }
+
 function hsi () {
-    history | grep -i
+    history | grep -i "$@"
 }
 
 source "${SCRIPT_DIR}/bash/jsonToCsv.sh"
@@ -23,3 +24,5 @@ source "${SCRIPT_DIR}/bash/xmlToJson.sh"
 source "${SCRIPT_DIR}/bash/build.sh"
 source "${SCRIPT_DIR}/bash/test.sh"
 source "${SCRIPT_DIR}/bash/run.sh"
+
+source "${SCRIPT_DIR}/bash/diffDirs.sh"

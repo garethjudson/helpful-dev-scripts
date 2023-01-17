@@ -133,6 +133,56 @@ cat file.xml | | xmlToJson
 xmlToJson < file.xml
 ```
 
+## diffDirs
+Compare the contents of two directory trees and get the differences.
+Does not compare files, just the existence or non-existence of files. 
+
+Undercovers this uses 'diff' for the output so it can be interpretted the same way. 
+
+e.g 
+Directory structure:
+```
+a -> c/
+     -> fileOne.json
+  -> d/ 
+     -> fileTwo.xml
+  -> f/
+
+b -> c/ 
+     -> fileTwo.json
+     -> fileTwoA.json
+  -> d/
+     -> fileTwo.xml
+  -> f/
+     -> fileThree.json
+``` 
+Then using the utility:
+```
+> diffDirs a b
+
+1,2c1
+< /c/fileOne.json
+< /c/fileTwoA.json
+---
+> /c/fileTwo.json
+3a3
+> /f/fileThree.json
+```
+
+If you only want to see if files are added/missing etc. this is useful
+
+## hsi
+This is just an alias for `history | grep -i` 
+This is useful when you want to search for a previous command, maybe with a pattern or otherwise thats a bit more vague than what you might find in the reverse search (e.g. ctrl+r). It also allows you to pipe the output to further commands or by passing to grep again e.g. if you want to do a -v inverse match, this means you find things when you're really fuzzy about specifics or if you run a command a lot with complex arguments and want a specific example.
+
+Example:
+`hsi 'diffDirs . b'`
+
+```
+50* diffDirs a b
+51* diffDirs c b
+```
+
 ## diffJson
 Get a json object that represents the fields that have changed only
 
@@ -214,4 +264,3 @@ Outputs
 ```
 Thu, 13 Jan 2022 00:40:00 GMT
 ```
-
