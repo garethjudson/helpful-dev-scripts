@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd)"
 SCRIPT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 function diffJson() {
@@ -26,3 +25,4 @@ source "${SCRIPT_DIR}/bash/test.sh"
 source "${SCRIPT_DIR}/bash/run.sh"
 
 source "${SCRIPT_DIR}/bash/diffDirs.sh"
+source "${SCRIPT_DIR}/bash/diffSync.sh"

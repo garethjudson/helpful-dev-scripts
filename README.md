@@ -237,6 +237,30 @@ We can from the above fairly concisely what has changed, and what it has changed
 
 The function is recursive, and will go deep on the object. So be careful with large very JSON structures.
 
+## diffSync
+Utility that will sync directories, from or to s3, or locally. The build in aws sync relies on filesize and modified date to determine when to sync files. This is for when you acutally need to know if the file has changed. THIS UTILITY WILL DELETE FILES FROM THE DESTINATION 'to' DIRECTORY/BUCKET. Use at your own risk.
+
+
+Sometimes sending events into s3 because you overwritten a file that hasn't changed is not wanted. Sometimes filesize does not change but the file has changed. In some circumstances the last modified dates will not be the same, when the files have not changed. The soluntion is to sync the bucket to an empty temporary directory and then compare this to the local directory. This is not intended for buckets that are huge, use at your own risk of waiting forever! 
+
+
+supported usage:
+`diffSync 'from' 'to'`
+
+all files in the from directory will be synced (including deleting missing files from the 'to' directory)
+
+Local directories:
+`diffSync "./local/dir/a" "./local/dir/b"`
+
+From local to s3:
+`diffSync "./local/dir/a" "s3://remote_bucket/key/prefix/to/logical/dirs/here/"`
+
+From s3 to local:
+`diffSync "s3://remote_bucket/key/prefix/to/logical/dirs/here/" "./local/dir/a"`
+
+
+You manage how you log into the s3 command line. If you don't know how to do this safely and securely, then you shouldn't use this utility.
+
 ## toLocalDate
 Convert a date to your into human readable date/time in the local timezone. Useful when you have a time in one zone or another and you want a quick conversion to your local timezone.
 
