@@ -26,3 +26,6 @@ source "${SCRIPT_DIR}/bash/run.sh"
 
 source "${SCRIPT_DIR}/bash/diffDirs.sh"
 source "${SCRIPT_DIR}/bash/diffSync.sh"
+
+source "${SCRIPT_DIR}/bash/dumpDb.sh"
+source "${SCRIPT_DIR}/bash/restoreDb.sh"

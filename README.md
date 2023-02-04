@@ -261,6 +261,87 @@ From s3 to local:
 
 You manage how you log into the s3 command line. If you don't know how to do this safely and securely, then you shouldn't use this utility.
 
+## dump_db
+dump_db is a function that wraps database dump commands and outputs the dump to stdout. 
+
+The command uses network compression, but manually gzip compresses the output when writing the stream. 
+
+You can then pipe that output to disk, the cloud or whereever you feel like.
+
+
+*Note:*
+  look at dump_db and understand how it works. Using this incorrectly could leak passwords and data. This could present a security risk.
+  
+  If you don't understand the risk of using this function, probably don't. Ask yourself what you're doing with your life :D 
+  
+  HIGHLY recommend testing this on a test DB that does not matter before you do anything silly with it.
+  TODO: implement validation of inputs.
+
+
+example usage:
+```
+  dump_db -t "mysql" -h "myhost" -u "myuser" -p "fakepassword" > mysql_dump_file.gz
+```
+
+or
+
+```
+  dump_db -t "mysql" -h "myhost" -u "myuser" -p "fakepassword" | special_command_to_put_the_output_somewhere
+```
+
+required options:
+```
+  -t --db_type       the database type (currently supported 'mysql' and 'postgres')
+  -h --db_host       the database host
+  -n --db_name       the name of the database to dump
+  -u --db_user       username on the database server that is allowed to do a dump
+  -P --db_password   password of the user (there is inherant security risk providing a database password through a command line. Understand the risk and use this tool with caution!!)
+```
+other options:
+```
+  -p --db_port       the database port (mysql default = 3306, postgres default = 5432)
+```
+
+## restore_db
+restore_db is a function that wraps database restore commands and restores a gziped dump to the appropriate database.
+
+It reads the dump from stdin, so you can supply it from the command line from whereever you choose. 
+Supports mysql and postgres via the mysql cli and pg_restore tool.
+
+
+*Note:*
+  Understand how this works. Using this incorrectly could result in data loss. Passwords are passed around and this could present a security risk.
+  
+  If you don't understand the risk of using this function, probably don't. Ask yourself what you're doing with your life :D 
+  
+  HIGHLY recommend testing this on a test DB that you can afford to overwrite before you do anything silly with it.
+  
+  TODO: implement validation of inputs.
+
+example usage: 
+```
+  cat mysql_dump_file.gz | restore_db -t "mysql" -h "myhost" -u "myuser" -p "fakepassword"
+```
+
+or 
+```
+  restore_db -t "mysql" -h "myhost" -u "myuser" -p "fakepassword" < mysql_dump_file.gz
+```
+
+required options:
+```
+  -t --db_type       the database type (currently supported 'mysql' and 'postgres')
+  -h --db_host       the database host
+  -n --db_name       the name of the database to dump
+  -u --db_user       username on the database server that is allowed to do a dump
+  -P --db_password   password of the user (there is inherant security risk providing a database password through a command line. Understand the risk and use this tool with caution!!)
+```
+
+other options:
+```
+  -p --db_port       the database port (mysql default = 3306, postgres default = 5432)
+```
+
 ## toLocalDate
 Convert a date to your into human readable date/time in the local timezone. Useful when you have a time in one zone or another and you want a quick conversion to your local timezone.
 
