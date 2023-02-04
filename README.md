@@ -1,6 +1,11 @@
 # Helpful Dev Scripts
 This project is a collection of useful scripts for various dev tasks.
-This really is a repository to store things that I use so I don't loose this knowledge.
+In some cases the scripts may be just a wrapper around a command, and by itself not be that valuable. 
+As this really is a repository to store things that I use (or have used) so I don't loose this knowledge.  
+
+
+I find it is often a useful way for me to learn and retain knowledge to write code using a tool, or technique so that I can remember how to do it later.
+So if I don't remember directly I have this project to refer to, so that it will refresh my knowledge.
 
 ## Usage
 To get access to all scripts from your console source the 'source.sh' script in your .bashrc or .zshrc (or whatever your shell uses...)
