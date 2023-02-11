@@ -29,3 +29,5 @@ source "${SCRIPT_DIR}/bash/diffSync.sh"
 
 source "${SCRIPT_DIR}/bash/dumpDb.sh"
 source "${SCRIPT_DIR}/bash/restoreDb.sh"
+
+source "${SCRIPT_DIR}/bash/nextSemanticVersion.sh"

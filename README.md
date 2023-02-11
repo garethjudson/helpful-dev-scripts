@@ -66,6 +66,20 @@ examples:
 
 `./mvnw test`
 
+# nextSemanticVersion
+Just a script to take a recommended version bump and apply it to your semantic version.
+Useful in conjunction with conventional commits.
+An example would be to use in conjunction with npm project conventional-recommended-bump, which will tell you 'patch', 'minor' and 'major' based on your commit history (e.g. conventional-changelog-angular)
+
+
+This means you don't have to use something that is packaging or build tool specific, so you can potentially apply to all projects and just bundle the build tools into the build agent (or preferably, imo, docker image)
+
+Usage:
+ `next_semantic_version 1.0.0 patch' result 1.0.1
+
+ `next_semantic_version 1.0.2 minor' result 1.1.0
+
+ `next_semantic_version 1.2.4 major' result 2.0.0
 
 ## jsonToCsv
 Convert an array of json objects to a csv list. 
@@ -134,7 +148,7 @@ echo '<example attribute="w" anotherAttribute="z">a<aList><item>1</item><item>2<
 ```
 or from a file examples:
 ```
-cat file.xml | | xmlToJson
+cat file.xml | xmlToJson
 xmlToJson < file.xml
 ```
 
