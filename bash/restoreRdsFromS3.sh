@@ -10,6 +10,9 @@ function restore_rds_from_s3() {
       HIGHLY recommend testing this on a test DB that you can afford to overwrite before you do anything silly with it.
       TODO: implement validation of inputs.
 
+    This really expected to be run within aws (possibly on a node that has db cluster access). 
+    This is typically because you would be advised against exposing your database to the world in this way.
+
     example usage: 
       restore_rds_from_s3 -s 'secret_id' -f 's3://my-database-dump-bucket/s3-backup-file.gz' -n "mydatabase_name"
 
@@ -27,16 +30,21 @@ function restore_rds_from_s3() {
                              }
                              This should be relatively self explanitary. 
     optional:
+      -h --host              in case you want to run locally (e.g. port forward/ssm tunnel) you can override the host
+      -p --port              in case you want to run locally (e.g. port forward/ssm tunnel) you can override the port
+      -u --user              to override the user
+      -P --password          to override the password
       -n --db_name           the name of the db in the database being restored. Allows you to restore to a different db name on the same cluster/instance
 END
   }
 
-  local s3_backup_file secret_id db_name
+  local s3_backup_file secret_id db_name db_host db_user db_password db_port
 
   if [[ -n "${1:-}" ]]; then
     while [[ "${1:-}" =~ ^- && ! "${1:-}" == "--" ]]; do
       case "${1}" in
       -f | --s3_backup_file)
+        shift
         s3_backup_file="${1}"
         ;;
       -s | --secret_id)
@@ -46,7 +54,23 @@ END
       -n | --db_name)
         shift
         db_name="${1}"
-        ;;  
+        ;;
+      -h | --host)
+        shift
+        db_host="${1}"
+        ;;
+      -p | --port)
+        shift
+        db_port="${1}"
+        ;;
+      -u | --user)
+        shift
+        db_user="${1}"
+        ;;
+      -P | --password)
+        shift
+        db_password="${1}"
+        ;;
       -*)
         output_restore_rds_from_s3
         return 0
@@ -58,15 +82,17 @@ END
   fi
 
   # Declare vars seperate assignment, see https://www.shellcheck.net/wiki/SC2155
-  local db_type db_host db_user db_password db_port secret_json
+  local db_type secret_json
 
   secret_json="$(aws secretsmanager get-secret-value --secret-id "${secret_id}" | jq .SecretString -r)"
   db_type="$(echo "${secret_json}" | jq -r .engine)"
-  db_host="$(echo "${secret_json}" | jq -r .host | sed -E 's/.cluster-([a-zA-Z0-9\.-]+.rds.amazonaws.com)/.cluster-ro-\1/')"
-  db_user="$(echo "${secret_json}" | jq -r .username)"
-  db_password="$(echo "${secret_json}" | jq -r .password)"
-  db_port="$(echo "${secret_json}" | jq -r .port)"
-  db_name="${db_name:-"$(echo "${secret_json}" | jq -r .dbname)"}"
+  
+  db_host="${db_host:-$(echo "${secret_json}" | jq -r .host)}"
+  db_port="${db_port:-$(echo "${secret_json}" | jq -r .port)}"
+  db_name="${db_name:-$(echo "${secret_json}" | jq -r .dbname)}"
 
-  aws s3 cp "${s3_backup_file}" - | restore_db -t "${db_type}" -h "${db_host}" -P "${db_port}" -u "${db_user}" -p "${db_password}"
+  db_user="${db_user:-$(echo "${secret_json}" | jq -r .username)}"
+  db_password="${db_password:-$(echo "${secret_json}" | jq -r .password)}"
+ 
+  aws s3 cp "${s3_backup_file}" - | restore_db -t "${db_type}" -h "${db_host}" -p "${db_port}" -u "${db_user}" -P "${db_password}"
 }
