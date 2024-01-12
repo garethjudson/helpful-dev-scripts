@@ -17,6 +17,15 @@ function hsi () {
     history | grep -i "$@"
 }
 
+function k8sNamespace () {
+  kubectl config set-context --current --namespace=${1}
+}
+
+function k8sEksCluster() {
+  kubectl config use-context "$(aws eks describe-cluster --output json --name "$(aws eks --output json list-clusters | jq -r '.clusters[0]')" | jq -r '.cluster.arn')"
+}
+
+source "${SCRIPT_DIR}/bash/csvTojson.sh"
 source "${SCRIPT_DIR}/bash/jsonToCsv.sh"
 source "${SCRIPT_DIR}/bash/xmlToJson.sh"
 

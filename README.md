@@ -190,18 +190,6 @@ Then using the utility:
 
 If you only want to see if files are added/missing etc. this is useful
 
-## hsi
-This is just an alias for `history | grep -i` 
-This is useful when you want to search for a previous command, maybe with a pattern or otherwise thats a bit more vague than what you might find in the reverse search (e.g. ctrl+r). It also allows you to pipe the output to further commands or by passing to grep again e.g. if you want to do a -v inverse match, this means you find things when you're really fuzzy about specifics or if you run a command a lot with complex arguments and want a specific example.
-
-Example:
-`hsi 'diffDirs . b'`
-
-```
-50* diffDirs a b
-51* diffDirs c b
-```
-
 ## diffJson
 Get a json object that represents the fields that have changed only
 
@@ -320,6 +308,25 @@ other options:
 ```
   -p --db_port       the database port (mysql default = 3306, postgres default = 5432)
 ```
+
+## hsi
+This is just an alias for `history | grep -i`
+This is useful when you want to search for a previous command, maybe with a pattern or otherwise thats a bit more vague than what you might find in the reverse search (e.g. ctrl+r). It also allows you to pipe the output to further commands or by passing to grep again e.g. if you want to do a -v inverse match, this means you find things when you're really fuzzy about specifics or if you run a command a lot with complex arguments and want a specific example.
+
+Example:
+`hsi 'diffDirs . b'`
+
+```
+50* diffDirs a b
+51* diffDirs c b
+```
+
+## k8sEksCluster
+Alias to set the cluster to the first eks cluster returned by using the `aws eks list-clusters` command.
+Uses the `kubectl config use-context` command to set the cluster.
+
+## k8sNamespace
+Alias to set the current namespace via kubectl. Accepts a single argument of the namespace name.
 
 ## restore_db
 restore_db is a function that wraps database restore commands and restores a gziped dump to the appropriate database.
