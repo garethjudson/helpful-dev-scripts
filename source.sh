@@ -25,6 +25,24 @@ function k8sEksCluster() {
   kubectl config use-context "$(aws eks describe-cluster --output json --name "$(aws eks --output json list-clusters | jq -r '.clusters[0]')" | jq -r '.cluster.arn')"
 }
 
+function k8sAllResources() {
+  for i in $(kubectl api-resources --verbs=list --namespaced -o name | grep -v "events.events.k8s.io" | grep -v "events" | sort | uniq); do
+      if [ -z "${1}" ]
+      then
+        OUTPUT="$(kubectl get --ignore-not-found "${i}")"
+      else
+        OUTPUT="$(kubectl get -n "${1}" --ignore-not-found "${i}")"
+      fi
+
+      if [ -n "${OUTPUT}" ]; then
+        echo "Resource: ${i}"
+        # shellcheck disable=SC2086
+        echo ${OUTPUT}
+        printf "\n"
+      fi
+    done
+}
+
 source "${SCRIPT_DIR}/bash/csvTojson.sh"
 source "${SCRIPT_DIR}/bash/jsonToCsv.sh"
 source "${SCRIPT_DIR}/bash/xmlToJson.sh"
